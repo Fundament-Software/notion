@@ -19,8 +19,8 @@ use crate::models::block::{Block, CreateBlock, FileOrEmojiObject};
 use crate::models::error::ErrorResponse;
 use crate::models::paging::PagingCursor;
 use crate::models::users::User;
-pub use chrono::{DateTime, Utc};
 pub use serde_json::value::Number;
+pub use time::{Date, OffsetDateTime};
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Copy, Clone)]
 #[serde(rename_all = "snake_case")]
@@ -36,9 +36,11 @@ pub struct Database {
     /// Unique identifier for the database.
     pub id: DatabaseId,
     /// Date and time when this database was created.
-    pub created_time: DateTime<Utc>,
+    #[serde(with = "time::serde::iso8601")]
+    pub created_time: OffsetDateTime,
     /// Date and time when this database was updated.
-    pub last_edited_time: DateTime<Utc>,
+    #[serde(with = "time::serde::iso8601")]
+    pub last_edited_time: OffsetDateTime,
     /// Name of the database as it appears in Notion.
     pub title: Vec<RichText>,
     /// Schema of properties for the database as they appear in Notion.
@@ -208,9 +210,11 @@ pub struct PageUpdateRequest {
 pub struct Page {
     pub id: PageId,
     /// Date and time when this page was created.
-    pub created_time: DateTime<Utc>,
+    #[serde(with = "time::serde::iso8601")]
+    pub created_time: OffsetDateTime,
     /// Date and time when this page was updated.
-    pub last_edited_time: DateTime<Utc>,
+    #[serde(with = "time::serde::iso8601")]
+    pub last_edited_time: OffsetDateTime,
     /// The archived status of the page.
     pub archived: bool,
     pub properties: Properties,

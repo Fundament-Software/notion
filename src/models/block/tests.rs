@@ -8,8 +8,9 @@ mod tests {
     use crate::models::text::{Annotations, RichText, RichTextCommon, Text, TextColor};
     use crate::models::users::UserCommon;
     use crate::models::Object;
-    use chrono::DateTime;
     use std::str::FromStr;
+    use time::format_description::well_known::Iso8601;
+    use time::OffsetDateTime;
 
     #[test]
     fn heading_1() {
@@ -19,8 +20,17 @@ mod tests {
             Block::Heading1 {
                 common: BlockCommon {
                     id: BlockId::from_str("9e891834-6a03-475c-a2b8-421e17f0f3aa").unwrap(),
-                    created_time: DateTime::from_str("2022-05-12T21:15:00.000Z").unwrap(),
-                    last_edited_time: DateTime::from_str("2022-05-12T22:10:00.000Z").unwrap(),
+                    created_time: OffsetDateTime::parse(
+                        "2022-05-12T21:15:00.000Z",
+                        &Iso8601::DEFAULT
+                    )
+                    .unwrap(),
+
+                    last_edited_time: OffsetDateTime::parse(
+                        "2022-05-12T22:10:00.000Z",
+                        &Iso8601::DEFAULT
+                    )
+                    .unwrap(),
                     has_children: false,
                     created_by: UserCommon {
                         id: UserId::from_str("6419f912-5293-4ea8-b2c8-9c3ce44f90e3").unwrap(),
@@ -222,7 +232,9 @@ mod tests {
         assert_eq!(file_object, FileOrEmojiObject::File {
             file: InternalFileObject {
                 url: "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/2703e742-ace5-428c-a74d-1c587ceddc32/DiRT_Rally.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220513%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220513T201035Z&X-Amz-Expires=3600&X-Amz-Signature=714b49bde0b499fb8f3aae1a88a8cbd374f2b09c1d128e91cac49e85ce0e00fb&X-Amz-SignedHeaders=host&x-id=GetObject".to_string(),
-                expiry_time: DateTime::from_str("2022-05-13T21:10:35.817Z").unwrap(),
+                expiry_time:
+                OffsetDateTime::parse("2022-05-13T21:10:35.817Z", &Iso8601::DEFAULT)
+                    .unwrap(),
             }
         })
     }
@@ -251,8 +263,16 @@ mod tests {
                 block: Block::Callout {
                     common: BlockCommon {
                         id: BlockId::from_str("00e8829a-a7b8-4075-884a-8f53be145d2f").unwrap(),
-                        created_time: DateTime::from_str("2022-05-13T20:08:00.000Z").unwrap(),
-                        last_edited_time: DateTime::from_str("2022-05-13T20:08:00.000Z").unwrap(),
+                        created_time: OffsetDateTime::parse(
+                            "2022-05-13T20:08:00.000Z",
+                            &Iso8601::DEFAULT
+                        )
+                        .unwrap(),
+                        last_edited_time: OffsetDateTime::parse(
+                            "2022-05-13T20:08:00.000Z",
+                            &Iso8601::DEFAULT
+                        )
+                        .unwrap(),
                         has_children: true,
                         created_by: UserCommon {
                             id: UserId::from_str("e2507360-468c-4e0f-a928-7bbcbbb45353").unwrap(),

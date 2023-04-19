@@ -5,8 +5,9 @@ use crate::models::text::{
 };
 use crate::models::users::{Person, User, UserCommon};
 use crate::models::{ListResponse, Object, Page};
-use chrono::{DateTime, NaiveDate};
 use std::str::FromStr;
+use time::format_description::well_known::Iso8601;
+use time::{Date, Month, OffsetDateTime};
 
 #[test]
 fn deserialize_page() {
@@ -113,7 +114,9 @@ fn rich_text_mention_date() {
             },
             mention: MentionObject::Date {
                 date: DateValue {
-                    start: DateOrDateTime::Date(NaiveDate::from_str("2022-04-16").unwrap()),
+                    start: DateOrDateTime::Date(
+                        Date::from_calendar_date(2022, Month::April, 16).unwrap()
+                    ),
                     end: None,
                     time_zone: None,
                 }
@@ -144,7 +147,8 @@ fn rich_text_mention_date_with_time() {
             mention: MentionObject::Date {
                 date: DateValue {
                     start: DateOrDateTime::DateTime(
-                        DateTime::from_str("2022-05-14T09:00:00.000-04:00").unwrap()
+                        OffsetDateTime::parse("2022-05-14T09:00:00.000-04:00", &Iso8601::DEFAULT)
+                            .unwrap()
                     ),
                     end: None,
                     time_zone: None,
@@ -175,9 +179,11 @@ fn rich_text_mention_date_with_end() {
             },
             mention: MentionObject::Date {
                 date: DateValue {
-                    start: DateOrDateTime::Date(NaiveDate::from_str("2022-05-12").unwrap()),
+                    start: DateOrDateTime::Date(
+                        Date::from_calendar_date(2022, Month::May, 12).unwrap()
+                    ),
                     end: Some(DateOrDateTime::Date(
-                        NaiveDate::from_str("2022-05-13").unwrap()
+                        Date::from_calendar_date(2022, Month::May, 13).unwrap()
                     )),
                     time_zone: None,
                 }
@@ -211,10 +217,12 @@ fn rich_text_mention_date_with_end_and_time() {
             mention: MentionObject::Date {
                 date: DateValue {
                     start: DateOrDateTime::DateTime(
-                        DateTime::from_str("2022-04-16T12:00:00.000-04:00").unwrap()
+                        OffsetDateTime::parse("2022-04-16T12:00:00.000-04:00", &Iso8601::DEFAULT)
+                            .unwrap()
                     ),
                     end: Some(DateOrDateTime::DateTime(
-                        DateTime::from_str("2022-04-16T12:00:00.000-04:00").unwrap()
+                        OffsetDateTime::parse("2022-04-16T12:00:00.000-04:00", &Iso8601::DEFAULT)
+                            .unwrap()
                     )),
                     time_zone: None,
                 }

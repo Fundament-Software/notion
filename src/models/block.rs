@@ -1,5 +1,5 @@
-use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use time::OffsetDateTime;
 
 use crate::ids::{AsIdentifier, BlockId, DatabaseId, PageId};
 use crate::models::text::{RichText, TextColor};
@@ -10,8 +10,10 @@ mod tests;
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct BlockCommon {
     pub id: BlockId,
-    pub created_time: DateTime<Utc>,
-    pub last_edited_time: DateTime<Utc>,
+    #[serde(with = "time::serde::iso8601")]
+    pub created_time: OffsetDateTime,
+    #[serde(with = "time::serde::iso8601")]
+    pub last_edited_time: OffsetDateTime,
     pub has_children: bool,
     pub created_by: UserCommon,
     pub last_edited_by: UserCommon,
@@ -33,7 +35,8 @@ pub struct Text {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct InternalFileObject {
     url: String,
-    expiry_time: DateTime<Utc>,
+    #[serde(with = "time::serde::iso8601")]
+    expiry_time: OffsetDateTime,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]

@@ -2,11 +2,11 @@ use crate::models::{
     properties::{DateOrDateTime, RollupPropertyValue, RollupValue},
     PropertyValue,
 };
-use chrono::NaiveDate;
+use time::{Date, Month};
 
 #[test]
 fn verify_date_parsing() {
-    let date = NaiveDate::from_ymd_opt(2021, 01, 02).unwrap();
+    let date = Date::from_calendar_date(2021, Month::January, 2).unwrap();
     let result = serde_json::to_string(&DateOrDateTime::Date(date)).unwrap();
     let parsed: DateOrDateTime = serde_json::from_str(&result).unwrap();
     println!("{:?}", parsed);
