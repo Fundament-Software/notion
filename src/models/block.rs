@@ -202,12 +202,12 @@ pub struct TableOfContents {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct ColumnListFields {
-    pub children: Vec<Block>,
+    pub children: Option<Vec<Block>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct ColumnFields {
-    pub children: Vec<Block>,
+    pub children: Option<Vec<Block>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -218,7 +218,7 @@ pub struct LinkPreviewFields {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct TemplateFields {
     pub rich_text: Vec<RichText>,
-    pub children: Vec<Block>,
+    pub children: Option<Vec<Block>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -237,7 +237,7 @@ pub struct SyncedFromObject {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct SyncedBlockFields {
     pub synced_from: Option<SyncedFromObject>,
-    pub children: Vec<Block>,
+    pub children: Option<Vec<Block>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -245,7 +245,7 @@ pub struct TableFields {
     pub table_width: u64,
     pub has_column_header: bool,
     pub has_row_header: bool,
-    pub children: Vec<Block>,
+    pub children: Option<Vec<Block>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
