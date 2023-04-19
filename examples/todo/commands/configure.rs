@@ -4,11 +4,14 @@ use notion::ids::{AsIdentifier, DatabaseId};
 use notion::models::search::NotionSearch;
 use notion::models::Database;
 use notion::NotionApi;
-use skim::{Skim, SkimItem, SkimItemReceiver, SkimItemSender, SkimOptions};
 use std::borrow::Cow;
 use std::ops::Deref;
 use std::sync::Arc;
 
+#[cfg(not(windows))]
+use skim::{Skim, SkimItem, SkimItemReceiver, SkimItemSender, SkimOptions};
+
+#[cfg(not(windows))]
 fn skim_select_database(databases: Vec<Database>) -> Result<DatabaseId> {
     let options = SkimOptions::default();
 
@@ -49,6 +52,7 @@ fn skim_select_database(databases: Vec<Database>) -> Result<DatabaseId> {
     Ok(database_id.clone())
 }
 
+#[cfg(not(windows))]
 pub async fn configure(notion_api: NotionApi) -> Result<()> {
     let databases: Vec<Database> = notion_api
         .search(NotionSearch::filter_by_databases())
@@ -67,5 +71,10 @@ pub async fn configure(notion_api: NotionApi) -> Result<()> {
 
     std::fs::write("../todo_config.toml", bytes)?;
 
+    Ok(())
+}
+
+#[cfg(windows)]
+pub async fn configure(_: NotionApi) -> Result<()> {
     Ok(())
 }
