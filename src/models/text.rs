@@ -1,6 +1,6 @@
+use crate::ids::{DatabaseId, PageId};
 use crate::models::properties::DateValue;
 use crate::models::users::User;
-use crate::{Database, Page};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Copy, Clone)]
@@ -68,6 +68,11 @@ pub struct Text {
     pub link: Option<Link>,
 }
 
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub struct MentionId<T> {
+    pub id: T,
+}
+
 /// See https://developers.notion.com/reference/rich-text#mention-objects
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "type")]
@@ -76,13 +81,11 @@ pub enum MentionObject {
     User {
         user: User,
     },
-    // TODO: need to add tests
     Page {
-        page: Page,
+        page: MentionId<PageId>,
     },
-    // TODO: need to add tests
     Database {
-        database: Database,
+        database: MentionId<DatabaseId>,
     },
     Date {
         date: DateValue,
@@ -114,6 +117,7 @@ pub enum RichText {
         #[serde(flatten)]
         rich_text: RichTextCommon,
         mention: MentionObject,
+        href: Option<String>,
     },
     /// See <https://developers.notion.com/reference/rich-text#equation-objects>
     Equation {
