@@ -1,12 +1,12 @@
 [package]
 name = "notion"
-version = "0.5.1"
-authors = ["Jake Swenson <jake@jakeswenson.com>"]
+version = "0.5.2"
+authors = ["Jake Swenson <jake@jakeswenson.com>", "Erik McClure <erikm@fundament.software>"]
 edition = "2018"
-repository = "https://github.com/jakeswenson/notion"
+repository = "https://github.com/fundament-software/notion"
 readme = "README.md"
 
-description = "A Notion Api Client"
+description = "A Notion Api Client, except it actually works"
 license = "MIT"
 
 [dependencies]
