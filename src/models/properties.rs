@@ -35,7 +35,7 @@ pub struct NumberDetails {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone)]
 #[serde(transparent)]
-pub struct SelectOptionId(String);
+pub struct SelectOptionId(pub String);
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Copy, Clone)]
 #[serde(rename_all = "lowercase")]
