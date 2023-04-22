@@ -22,7 +22,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features
   build:
-    runs-on: ubuntu-latest
+    runs-on: '${{ matrix.os }}'
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: windows-latest
     steps:
       - uses: actions/checkout@v2
       - name: Rust Cache
