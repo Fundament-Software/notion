@@ -21,7 +21,7 @@ impl Display for StatusCode {
 }
 
 /// <https://developers.notion.com/reference/errors>
-#[derive(Serialize, Deserialize, Eq, PartialEq, Debug, Clone)]
+#[derive(Serialize, Deserialize, Eq, PartialEq, Debug, Clone, Hash)]
 pub struct ErrorResponse {
     pub status: StatusCode,
     pub code: ErrorCode,
@@ -29,7 +29,7 @@ pub struct ErrorResponse {
 }
 
 /// <https://developers.notion.com/reference/errors>
-#[derive(Serialize, Deserialize, Eq, PartialEq, Debug, Clone)]
+#[derive(Serialize, Deserialize, Eq, PartialEq, Debug, Clone, Hash)]
 #[serde(rename_all = "snake_case")]
 pub enum ErrorCode {
     InvalidJson,

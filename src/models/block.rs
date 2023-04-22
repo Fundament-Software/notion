@@ -4,6 +4,7 @@ use time::OffsetDateTime;
 use crate::ids::{AsIdentifier, BlockId, DatabaseId, PageId};
 use crate::models::text::{RichText, TextColor};
 use crate::models::users::UserCommon;
+use std::hash::{Hash, Hasher};
 
 mod tests;
 
@@ -17,6 +18,15 @@ pub struct BlockCommon {
     pub has_children: bool,
     pub created_by: UserCommon,
     pub last_edited_by: UserCommon,
+}
+
+impl Hash for BlockCommon {
+    fn hash<H: Hasher>(
+        &self,
+        state: &mut H,
+    ) {
+        self.id.hash(state);
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -420,6 +430,15 @@ pub enum Block {
     },
     #[serde(other)]
     Unknown,
+}
+
+impl Hash for Block {
+    fn hash<H: Hasher>(
+        &self,
+        state: &mut H,
+    ) {
+        self.as_id().hash(state);
+    }
 }
 
 impl AsIdentifier<BlockId> for Block {
