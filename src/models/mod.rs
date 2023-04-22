@@ -13,6 +13,7 @@ use crate::models::text::RichText;
 use crate::Error;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::hash::{Hash, Hasher};
 
 use crate::ids::{AsIdentifier, DatabaseId, PageId};
 use crate::models::block::{Block, CreateBlock, FileOrEmojiObject};
@@ -51,6 +52,15 @@ pub struct Database {
     // value object
     // A Property object.
     pub properties: HashMap<String, PropertyConfiguration>,
+}
+
+impl Hash for Database {
+    fn hash<H: Hasher>(
+        &self,
+        state: &mut H,
+    ) {
+        self.id.hash(state);
+    }
 }
 
 impl AsIdentifier<DatabaseId> for Database {
@@ -219,6 +229,15 @@ pub struct Page {
     pub archived: bool,
     pub properties: Properties,
     pub parent: Parent,
+}
+
+impl Hash for Page {
+    fn hash<H: Hasher>(
+        &self,
+        state: &mut H,
+    ) {
+        self.id.hash(state);
+    }
 }
 
 impl Page {

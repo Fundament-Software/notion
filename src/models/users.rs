@@ -1,5 +1,6 @@
 use crate::ids::UserId;
 use serde::{Deserialize, Serialize};
+use std::hash::{Hash, Hasher};
 
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
 pub struct UserCommon {
@@ -8,6 +9,15 @@ pub struct UserCommon {
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
+}
+
+impl Hash for UserCommon {
+    fn hash<H: Hasher>(
+        &self,
+        state: &mut H,
+    ) {
+        self.id.hash(state);
+    }
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
@@ -33,4 +43,17 @@ pub enum User {
         common: UserCommon,
         bot: Bot,
     },
+}
+
+impl Hash for User {
+    fn hash<H: Hasher>(
+        &self,
+        state: &mut H,
+    ) {
+        use User::*;
+        match self {
+            Person { common, .. } | Bot { common, .. } => &common.id,
+        }
+        .hash(state);
+    }
 }

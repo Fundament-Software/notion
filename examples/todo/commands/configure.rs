@@ -1,11 +1,18 @@
+#[cfg(not(windows))]
 use crate::TodoConfig;
 use anyhow::Result;
+#[cfg(not(windows))]
 use notion::ids::{AsIdentifier, DatabaseId};
+#[cfg(not(windows))]
 use notion::models::search::NotionSearch;
+#[cfg(not(windows))]
 use notion::models::Database;
 use notion::NotionApi;
+#[cfg(not(windows))]
 use std::borrow::Cow;
+#[cfg(not(windows))]
 use std::ops::Deref;
+#[cfg(not(windows))]
 use std::sync::Arc;
 
 #[cfg(not(windows))]
