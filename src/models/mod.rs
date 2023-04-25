@@ -206,6 +206,8 @@ pub struct PageCreateRequest {
     pub properties: Properties,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<CreateBlock>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub icon: Option<FileOrEmojiObject>,
 }
 
 #[derive(Serialize, Debug, Eq, PartialEq, Clone)]
