@@ -237,6 +237,8 @@ pub struct Page {
     pub archived: bool,
     pub properties: Properties,
     pub parent: Parent,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub icon: Option<FileOrEmojiObject>,
 }
 
 impl Hash for Page {

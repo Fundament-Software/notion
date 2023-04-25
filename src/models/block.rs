@@ -44,14 +44,14 @@ pub struct Text {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct InternalFileObject {
-    url: String,
+    pub url: String,
     #[serde(with = "time::serde::iso8601")]
-    expiry_time: OffsetDateTime,
+    pub expiry_time: OffsetDateTime,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct ExternalFileObject {
-    url: String,
+    pub url: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
