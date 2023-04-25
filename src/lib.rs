@@ -79,11 +79,25 @@ impl NotionApi {
     ) -> Result<Object, Error> {
         let request = request.build()?;
         let url = request.url();
+        let mut prefix = "";
+        let mut bodystr = "";
+
+        if let Some(body) = request.body() {
+            if let Some(bytes) = body.as_bytes() {
+                if let Some(result) = std::str::from_utf8(bytes).ok() {
+                    prefix = ": ";
+                    bodystr = result;
+                }
+            }
+        }
         tracing::trace!(
             method = request.method().as_str(),
             url = url.as_str(),
-            "Sending request"
+            "Sending request{}{}",
+            prefix,
+            bodystr
         );
+
         let json = self
             .client
             .execute(request)
