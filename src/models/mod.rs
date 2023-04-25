@@ -192,6 +192,12 @@ impl Properties {
             _ => None,
         })
     }
+    pub fn title_object(&self) -> Option<&Vec<RichText>> {
+        self.properties.values().find_map(|p| match p {
+            PropertyValue::Title { title, .. } => Some(title),
+            _ => None,
+        })
+    }
 }
 
 #[derive(Serialize, Debug, Eq, PartialEq, Clone)]
@@ -243,6 +249,9 @@ impl Hash for Page {
 impl Page {
     pub fn title(&self) -> Option<String> {
         self.properties.title()
+    }
+    pub fn title_object(&self) -> Option<&Vec<RichText>> {
+        self.properties.title_object()
     }
 }
 
