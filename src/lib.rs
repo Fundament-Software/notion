@@ -1,5 +1,6 @@
-use crate::ids::{BlockId, DatabaseId};
+use crate::ids::{BlockId, DatabaseId, PropertyId};
 use crate::models::error::ErrorResponse;
+use crate::models::properties::PropertyItem;
 use crate::models::search::{DatabaseQuery, SearchRequest};
 use crate::models::{Database, ListResponse, Object, Page};
 use ids::{AsIdentifier, PageId};
@@ -13,7 +14,7 @@ use tracing::Instrument;
 pub mod ids;
 pub mod models;
 
-const NOTION_API_VERSION: &str = "2022-02-22";
+const NOTION_API_VERSION: &str = "2022-06-28";
 
 /// An wrapper Error type for all errors produced by the [`NotionApi`](NotionApi) client.
 #[derive(Debug, thiserror::Error)]
@@ -235,6 +236,46 @@ impl NotionApi {
 
         match result {
             Object::Page { page } => Ok(page),
+            response => Err(Error::UnexpectedResponse { response }),
+        }
+    }
+
+    /// Get a page property by [PageId] and [PropertyId]
+    pub async fn get_property<T: AsIdentifier<PageId>, U: AsIdentifier<PropertyId>>(
+        &self,
+        page_id: T,
+        property_id: U,
+    ) -> Result<PropertyItem, Error> {
+        let result = self
+            .make_json_request(self.client.get(format!(
+                "https://api.notion.com/v1/pages/{}/properties/{}",
+                page_id.as_id(),
+                property_id.as_id()
+            )))
+            .await?;
+
+        match result {
+            Object::PropertyItem { property_item } => Ok(property_item),
+            response => Err(Error::UnexpectedResponse { response }),
+        }
+    }
+
+    /// Get a paginated page property by [PageId] and [PropertyId]
+    pub async fn get_paginated_property<T: AsIdentifier<PageId>, U: AsIdentifier<PropertyId>>(
+        &self,
+        page_id: T,
+        property_id: U,
+    ) -> Result<ListResponse<Object>, Error> {
+        let result = self
+            .make_json_request(self.client.get(format!(
+                "https://api.notion.com/v1/pages/{}/properties/{}",
+                page_id.as_id(),
+                property_id.as_id()
+            )))
+            .await?;
+
+        match result {
+            Object::List { list } => Ok(list),
             response => Err(Error::UnexpectedResponse { response }),
         }
     }

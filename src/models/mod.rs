@@ -8,7 +8,7 @@ mod tests;
 pub mod text;
 pub mod users;
 
-use crate::models::properties::{PropertyConfiguration, PropertyValue};
+use crate::models::properties::{PropertyConfiguration, PropertyItem, PropertyValue};
 use crate::models::text::RichText;
 use crate::Error;
 use serde::{Deserialize, Serialize};
@@ -163,6 +163,18 @@ impl ListResponse<Object> {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[serde(tag = "object")]
+#[serde(rename_all = "snake_case")]
+pub enum PropertyResponse {
+    List {
+        results: ListResponse<PropertyValue>,
+    },
+    PropertyItem {
+        property_item: PropertyValue,
+    },
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "type")]
 #[serde(rename_all = "snake_case")]
 pub enum Parent {
@@ -292,6 +304,11 @@ pub enum Object {
     Error {
         #[serde(flatten)]
         error: ErrorResponse,
+    },
+    #[serde(rename = "property_item")]
+    PropertyItem {
+        #[serde(flatten)]
+        property_item: PropertyItem,
     },
 }
 

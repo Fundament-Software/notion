@@ -448,3 +448,113 @@ pub enum RollupPropertyValue {
         last_edited_by: User,
     },
 }
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[serde(tag = "type")]
+#[serde(rename_all = "snake_case")]
+pub enum PropertyItem {
+    // <https://developers.notion.com/reference/property-object#title-configuration>
+    Title {
+        id: PropertyId,
+        title: RichText,
+    },
+    /// <https://developers.notion.com/reference/property-object#text-configuration>
+    #[serde(rename = "rich_text")]
+    Text {
+        id: PropertyId,
+        rich_text: RichText,
+    },
+    /// <https://developers.notion.com/reference/property-object#number-configuration>
+    Number {
+        id: PropertyId,
+        number: Option<Number>,
+    },
+    /// <https://developers.notion.com/reference/property-object#select-configuration>
+    Select {
+        id: PropertyId,
+        select: Option<SelectedValue>,
+    },
+    /// <https://developers.notion.com/reference/property-object#status-configuration>
+    Status {
+        id: PropertyId,
+        status: Option<SelectedValue>,
+    },
+    /// <https://developers.notion.com/reference/property-object#multi-select-configuration>
+    MultiSelect {
+        id: PropertyId,
+        multi_select: Option<SelectedValue>,
+    },
+    /// <https://developers.notion.com/reference/property-object#date-configuration>
+    Date {
+        id: PropertyId,
+        date: Option<DateValue>,
+    },
+    /// <https://developers.notion.com/reference/property-object#formula-configuration>
+    Formula {
+        id: PropertyId,
+        formula: FormulaResultValue,
+    },
+    /// <https://developers.notion.com/reference/property-object#relation-configuration>
+    /// It is actually an array of relations
+    Relation {
+        id: PropertyId,
+        relation: Option<RelationValue>,
+    },
+    /// <https://developers.notion.com/reference/property-object#rollup-configuration>
+    Rollup {
+        id: PropertyId,
+        rollup: Option<RollupValue>,
+    },
+    /// <https://developers.notion.com/reference/property-object#people-configuration>
+    People {
+        id: PropertyId,
+        people: User,
+    },
+    /// <https://developers.notion.com/reference/property-object#files-configuration>
+    Files {
+        id: PropertyId,
+        files: Option<FileReference>,
+    },
+    /// <https://developers.notion.com/reference/property-object#checkbox-configuration>
+    Checkbox {
+        id: PropertyId,
+        checkbox: bool,
+    },
+    /// <https://developers.notion.com/reference/property-object#url-configuration>
+    Url {
+        id: PropertyId,
+        url: Option<String>,
+    },
+    /// <https://developers.notion.com/reference/property-object#email-configuration>
+    Email {
+        id: PropertyId,
+        email: Option<String>,
+    },
+    /// <https://developers.notion.com/reference/property-object#phone-number-configuration>
+    PhoneNumber {
+        id: PropertyId,
+        phone_number: Option<String>,
+    },
+    /// <https://developers.notion.com/reference/property-object#created-time-configuration>
+    CreatedTime {
+        id: PropertyId,
+        #[serde(with = "time::serde::iso8601")]
+        created_time: OffsetDateTime,
+    },
+    /// <https://developers.notion.com/reference/property-object#created-by-configuration>
+    CreatedBy {
+        id: PropertyId,
+        created_by: User,
+    },
+    /// <https://developers.notion.com/reference/property-object#last-edited-time-configuration>
+    LastEditedTime {
+        id: PropertyId,
+        #[serde(with = "time::serde::iso8601")]
+        last_edited_time: OffsetDateTime,
+    },
+    /// <https://developers.notion.com/reference/property-object#last-edited-by-configuration>
+    LastEditedBy {
+        id: PropertyId,
+        last_edited_by: Option<User>,
+    },
+}
