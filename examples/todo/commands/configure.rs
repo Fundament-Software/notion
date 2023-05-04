@@ -1,17 +1,16 @@
-#[cfg(not(windows))]
 use crate::TodoConfig;
 use anyhow::Result;
 #[cfg(not(windows))]
-use notion::ids::{AsIdentifier, DatabaseId};
-#[cfg(not(windows))]
+use notion::ids::AsIdentifier;
+use notion::ids::DatabaseId;
 use notion::models::search::NotionSearch;
-#[cfg(not(windows))]
 use notion::models::Database;
 use notion::NotionApi;
 #[cfg(not(windows))]
 use std::borrow::Cow;
 #[cfg(not(windows))]
 use std::ops::Deref;
+use std::str::FromStr;
 #[cfg(not(windows))]
 use std::sync::Arc;
 
@@ -59,7 +58,11 @@ fn skim_select_database(databases: Vec<Database>) -> Result<DatabaseId> {
     Ok(database_id.clone())
 }
 
-#[cfg(not(windows))]
+#[cfg(windows)]
+fn skim_select_database(_databases: Vec<Database>) -> Result<DatabaseId> {
+    DatabaseId::from_str("3a3aaaaa-aaaa-aaaa-aaaa-87c5bf4be82c").map_err(anyhow::Error::msg)
+}
+
 pub async fn configure(notion_api: NotionApi) -> Result<()> {
     let databases: Vec<Database> = notion_api
         .search(NotionSearch::filter_by_databases())
@@ -71,17 +74,12 @@ pub async fn configure(notion_api: NotionApi) -> Result<()> {
 
     println!("Selected database's id: {}", database_id);
 
-    let bytes = toml::to_vec(&TodoConfig {
+    let bytes = toml::to_string(&TodoConfig {
         api_token: None,
         task_database_id: Some(database_id),
     })?;
 
-    std::fs::write("../todo_config.toml", bytes)?;
+    std::fs::write("../todo_config.toml", bytes.as_bytes())?;
 
-    Ok(())
-}
-
-#[cfg(windows)]
-pub async fn configure(_: NotionApi) -> Result<()> {
     Ok(())
 }
