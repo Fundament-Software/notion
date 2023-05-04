@@ -85,7 +85,7 @@ impl NotionApi {
 
         if let Some(body) = request.body() {
             if let Some(bytes) = body.as_bytes() {
-                if let Some(result) = std::str::from_utf8(bytes).ok() {
+                if let Ok(result) = std::str::from_utf8(bytes) {
                     prefix = ": ";
                     bodystr = result;
                 }
