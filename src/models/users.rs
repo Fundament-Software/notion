@@ -11,15 +11,6 @@ pub struct UserCommon {
     pub avatar_url: Option<String>,
 }
 
-impl Hash for UserCommon {
-    fn hash<H: Hasher>(
-        &self,
-        state: &mut H,
-    ) {
-        self.id.hash(state);
-    }
-}
-
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
 pub struct Person {
     pub email: String,
@@ -31,18 +22,34 @@ pub struct Bot {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
-#[serde(tag = "type", rename_all = "snake_case")]
+#[serde(untagged, rename_all = "snake_case")]
 pub enum User {
     Person {
         #[serde(flatten)]
         common: UserCommon,
+        #[serde(rename = "type")]
+        tag: String,
         person: Person,
     },
     Bot {
         #[serde(flatten)]
         common: UserCommon,
+        #[serde(rename = "type")]
+        tag: String,
         bot: Bot,
     },
+    Stub {
+        id: UserId,
+    },
+}
+
+impl Hash for UserCommon {
+    fn hash<H: Hasher>(
+        &self,
+        state: &mut H,
+    ) {
+        self.id.hash(state);
+    }
 }
 
 impl Hash for User {
@@ -53,7 +60,17 @@ impl Hash for User {
         use User::*;
         match self {
             Person { common, .. } | Bot { common, .. } => &common.id,
+            Stub { id } => id,
         }
         .hash(state);
     }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
+#[serde(tag = "object", rename_all = "snake_case")]
+pub enum PeopleObject {
+    User {
+        #[serde(flatten)]
+        common: UserCommon,
+    },
 }

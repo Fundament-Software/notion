@@ -84,6 +84,7 @@ fn rich_text_mention_user_person() {
                 .to_string()
             ),
           },
+          tag: "person".to_string(),
           person: Person {
             email: "john.doe@gmail.com".to_string()
           },
