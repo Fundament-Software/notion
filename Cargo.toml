@@ -2,7 +2,7 @@
 name = "notion"
 version = "0.5.2"
 authors = ["Jake Swenson <jake@jakeswenson.com>", "Erik McClure <erikm@fundament.software>"]
-edition = "2018"
+edition = "2021"
 repository = "https://github.com/fundament-software/notion"
 readme = "README.md"
 
