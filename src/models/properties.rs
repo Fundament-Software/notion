@@ -215,7 +215,7 @@ pub enum PropertyConfiguration {
     /// See <https://developers.notion.com/reference/database#last-edited-time-configuration>
     LastEditedTime { id: PropertyId },
     /// See <https://developers.notion.com/reference/database#last-edited-by-configuration>
-    LastEditBy { id: PropertyId },
+    LastEditedBy { id: PropertyId },
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
