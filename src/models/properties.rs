@@ -216,6 +216,8 @@ pub enum PropertyConfiguration {
     LastEditedTime { id: PropertyId },
     /// See <https://developers.notion.com/reference/database#last-edited-by-configuration>
     LastEditedBy { id: PropertyId },
+    /// Undocumented property of wiki pages
+    Verification { id: PropertyId },
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -372,6 +374,11 @@ pub enum PropertyValue {
     LastEditedBy {
         id: PropertyId,
         last_edited_by: Option<User>,
+    },
+    /// Undocumented
+    Verification {
+        id: PropertyId,
+        verification: Option<Vec<User>>,
     },
 }
 

@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 
-use crate::ids::{AsIdentifier, DatabaseId, PageId};
+use crate::ids::{AsIdentifier, BlockId, DatabaseId, PageId};
 use crate::models::block::{Block, CreateBlock, FileOrEmojiObject};
 use crate::models::error::ErrorResponse;
 use crate::models::paging::PagingCursor;
@@ -186,6 +186,10 @@ pub enum Parent {
     Page {
         page_id: PageId,
     },
+    #[serde(rename = "block_id")]
+    Block {
+        block_id: BlockId,
+    },
     Workspace,
 }
 
@@ -253,6 +257,8 @@ pub struct Page {
     pub icon: Option<FileOrEmojiObject>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blocks: Option<Vec<Block>>,
 }
 
 impl Hash for Page {
