@@ -11,8 +11,8 @@ pub mod users;
 use crate::models::properties::{PropertyConfiguration, PropertyItem, PropertyValue};
 use crate::models::text::RichText;
 use crate::Error;
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use serde::{Deserialize, Serialize, Serializer};
+use std::collections::{BTreeMap, HashMap};
 use std::hash::{Hash, Hasher};
 
 use crate::ids::{AsIdentifier, BlockId, DatabaseId, PageId};
@@ -193,9 +193,20 @@ pub enum Parent {
     Workspace,
 }
 
+fn ordered_map<S>(
+    value: &HashMap<String, PropertyValue>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let ordered: BTreeMap<_, _> = value.iter().collect();
+    ordered.serialize(serializer)
+}
+
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Properties {
-    #[serde(flatten)]
+    #[serde(flatten, serialize_with = "ordered_map")]
     pub properties: HashMap<String, PropertyValue>,
 }
 
