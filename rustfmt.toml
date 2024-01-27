@@ -2,7 +2,7 @@
 edition = "2021"
 
 # https://rust-lang.github.io/rustfmt/?version=v1.5.1&search=#fn_args_layout
-fn_args_layout = "Vertical"
+fn_params_layout = "Vertical"
 
 # https://rust-lang.github.io/rustfmt/?version=v1.5.1&search=#imports_granularity
 # imports_granularity = "Crate" or "Module"?
