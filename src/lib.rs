@@ -13,7 +13,7 @@ use tracing::Instrument;
 
 pub mod ids;
 pub mod models;
-
+ 
 const NOTION_API_VERSION: &str = "2022-06-28";
 
 /// An wrapper Error type for all errors produced by the [`NotionApi`](NotionApi) client.
