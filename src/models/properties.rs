@@ -375,11 +375,27 @@ pub enum PropertyValue {
         id: PropertyId,
         last_edited_by: Option<User>,
     },
-    /// Undocumented
+    UniqueId {
+        id: PropertyId,
+        unique_id: UniqueIdValue,
+    },
     Verification {
         id: PropertyId,
-        verification: Option<Vec<User>>,
+        verification: VerificationValue,
     },
+}
+  
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub struct VerificationValue {
+    pub state: String,
+    pub verified_by: Option<User>,
+    pub date: Option<OffsetDateTime>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub struct UniqueIdValue {
+    pub number: Number,
+    pub prefix: Option<String>,
 }
 
 /// <https://developers.notion.com/reference/page#rollup-property-value-element>
