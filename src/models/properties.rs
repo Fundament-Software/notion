@@ -384,7 +384,7 @@ pub enum PropertyValue {
         verification: VerificationValue,
     },
 }
-  
+
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct VerificationValue {
     pub state: String,
