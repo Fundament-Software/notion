@@ -60,7 +60,7 @@ pub struct ExternalFileObject {
 pub enum FileOrEmojiObject {
     Emoji { emoji: String },
     File,
-    External
+    External,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
