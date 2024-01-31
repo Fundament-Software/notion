@@ -51,6 +51,7 @@ pub struct Database {
     //
     // value object
     // A Property object.
+    #[serde(serialize_with = "ordered_map")]
     pub properties: HashMap<String, PropertyConfiguration>,
 }
 
@@ -193,8 +194,8 @@ pub enum Parent {
     Workspace,
 }
 
-fn ordered_map<S>(
-    value: &HashMap<String, PropertyValue>,
+fn ordered_map<S, K: Ord + Serialize, V: Serialize>(
+    value: &HashMap<K, V>,
     serializer: S,
 ) -> Result<S::Ok, S::Error>
 where
