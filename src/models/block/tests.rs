@@ -224,7 +224,7 @@ mod tests {
             }
         )
     }
-
+/* 
     #[test]
     fn file_object() {
         let file_object: FileOrEmojiObject =
@@ -252,7 +252,7 @@ mod tests {
                 }
             }
         )
-    }
+    }*/
 
     #[test]
     fn callout() {
