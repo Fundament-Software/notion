@@ -59,16 +59,16 @@ pub struct ExternalFileObject {
 #[serde(rename_all = "snake_case")]
 pub enum FileOrEmojiObject {
     Emoji { emoji: String },
-    File { file: InternalFileObject },
-    External { external: ExternalFileObject },
+    File,
+    External,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "type")]
 #[serde(rename_all = "snake_case")]
 pub enum FileObject {
-    File { file: InternalFileObject },
-    External { external: ExternalFileObject },
+    File,
+    External,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]

@@ -229,29 +229,14 @@ mod tests {
     fn file_object() {
         let file_object: FileOrEmojiObject =
             serde_json::from_str(include_str!("tests/file_object.json")).unwrap();
-        assert_eq!(file_object, FileOrEmojiObject::File {
-            file: InternalFileObject {
-                url: "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/2703e742-ace5-428c-a74d-1c587ceddc32/DiRT_Rally.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220513%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220513T201035Z&X-Amz-Expires=3600&X-Amz-Signature=714b49bde0b499fb8f3aae1a88a8cbd374f2b09c1d128e91cac49e85ce0e00fb&X-Amz-SignedHeaders=host&x-id=GetObject".to_string(),
-                expiry_time:
-                OffsetDateTime::parse("2022-05-13T21:10:35.817Z", &Iso8601::DEFAULT)
-                    .unwrap(),
-            }
-        })
+        assert_eq!(file_object, FileOrEmojiObject::File)
     }
 
     #[test]
     fn external_file_object() {
         let external_file_object: FileOrEmojiObject =
             serde_json::from_str(include_str!("tests/external_file_object.json")).unwrap();
-        assert_eq!(
-            external_file_object,
-            FileOrEmojiObject::External {
-                external: ExternalFileObject {
-                    url: "https://nerdist.com/wp-content/uploads/2020/07/maxresdefault.jpg"
-                        .to_string(),
-                }
-            }
-        )
+        assert_eq!(external_file_object, FileOrEmojiObject::External)
     }
 
     #[test]
