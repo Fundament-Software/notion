@@ -7,7 +7,7 @@ mod tests {
     };
     use crate::models::text::{Annotations, RichText, RichTextCommon, Text, TextColor};
     use crate::models::users::UserCommon;
-    use crate::models::Object;
+    use crate::models::{IconObject, Object};
     use std::str::FromStr;
     use time::format_description::well_known::Iso8601;
     use time::OffsetDateTime;
@@ -32,6 +32,8 @@ mod tests {
                     )
                     .unwrap(),
                     has_children: false,
+                    archived: false,
+                    in_trash: false,
                     created_by: UserCommon {
                         id: UserId::from_str("6419f912-5293-4ea8-b2c8-9c3ce44f90e3").unwrap(),
                         name: None,
@@ -229,14 +231,53 @@ mod tests {
     fn file_object() {
         let file_object: FileOrEmojiObject =
             serde_json::from_str(include_str!("tests/file_object.json")).unwrap();
-        assert_eq!(file_object, FileOrEmojiObject::File)
+        assert_eq!(file_object,
+            FileOrEmojiObject::File {
+                caption: Vec::new(),
+                name: Some("blah.rs".into()),
+                file: InternalFileObject {
+                    expiry_time: OffsetDateTime::parse(
+                        "2022-05-13T21:10:35.817Z",
+                        &Iso8601::DEFAULT
+                    ).unwrap(),
+                    url: "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/2703e742-ace5-428c-a74d-1c587ceddc32/DiRT_Rally.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220513%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220513T201035Z&X-Amz-Expires=3600&X-Amz-Signature=714b49bde0b499fb8f3aae1a88a8cbd374f2b09c1d128e91cac49e85ce0e00fb&X-Amz-SignedHeaders=host&x-id=GetObject".into()
+                }
+            }
+        )
+    }
+
+    #[test]
+    fn file_page() {
+        let _: Object = serde_json::from_str(include_str!("tests/file_page.json")).unwrap();
+    }
+
+    #[test]
+    fn icon_object() {
+        let object: IconObject =
+            serde_json::from_str(include_str!("tests/icon_object.json")).unwrap();
+        assert_eq!(object, IconObject::File {
+                    file: InternalFileObject{expiry_time: OffsetDateTime::parse(
+                        "2022-05-13T21:10:35.817Z",
+                        &Iso8601::DEFAULT
+                    ).unwrap(),
+                    url:"https://prod-files-secure.s3.us-west-2.amazonaws.com/aldskfasduiwhwekjs/l=AKIAT73L2G45HZZMZU".into()
+                }
+            }
+        );
     }
 
     #[test]
     fn external_file_object() {
         let external_file_object: FileOrEmojiObject =
             serde_json::from_str(include_str!("tests/external_file_object.json")).unwrap();
-        assert_eq!(external_file_object, FileOrEmojiObject::External)
+        assert_eq!(
+            external_file_object,
+            FileOrEmojiObject::External {
+                external: ExternalFileObject {
+                    url: "https://nerdist.com/wp-content/uploads/2020/07/maxresdefault.jpg".into()
+                }
+            }
+        )
     }
 
     #[test]
@@ -259,6 +300,8 @@ mod tests {
                         )
                         .unwrap(),
                         has_children: true,
+                        archived: false,
+                        in_trash: false,
                         created_by: UserCommon {
                             id: UserId::from_str("e2507360-468c-4e0f-a928-7bbcbbb45353").unwrap(),
                             name: None,

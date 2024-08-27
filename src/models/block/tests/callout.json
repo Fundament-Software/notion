@@ -13,6 +13,7 @@
   },
   "has_children": true,
   "archived": false,
+  "in_trash": false,
   "type": "callout",
   "callout": {
     "rich_text": [

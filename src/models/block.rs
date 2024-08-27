@@ -16,6 +16,8 @@ pub struct BlockCommon {
     #[serde(with = "time::serde::iso8601")]
     pub last_edited_time: OffsetDateTime,
     pub has_children: bool,
+    pub archived: bool,
+    pub in_trash: bool,
     pub created_by: UserCommon,
     pub last_edited_by: UserCommon,
 }
@@ -58,17 +60,33 @@ pub struct ExternalFileObject {
 #[serde(tag = "type")]
 #[serde(rename_all = "snake_case")]
 pub enum FileOrEmojiObject {
-    Emoji { emoji: String },
-    File,
-    External,
+    Emoji {
+        emoji: String,
+    },
+    File {
+        caption: Vec<RichText>,
+        file: InternalFileObject,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        name: Option<String>,
+    },
+    External {
+        external: ExternalFileObject,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "type")]
 #[serde(rename_all = "snake_case")]
 pub enum FileObject {
-    File,
-    External,
+    File {
+        caption: Vec<RichText>,
+        file: InternalFileObject,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        name: Option<String>,
+    },
+    External {
+        external: ExternalFileObject,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -354,7 +372,6 @@ pub enum Block {
         #[serde(flatten)]
         common: BlockCommon,
         file: FileObject,
-        caption: Text,
     },
     Pdf {
         #[serde(flatten)]
@@ -509,7 +526,7 @@ impl From<Block> for CreateBlock {
             Block::Embed { embed, .. } => CreateBlock::Embed { embed },
             Block::Image { image, .. } => CreateBlock::Image { image },
             Block::Video { video, .. } => CreateBlock::Video { video },
-            Block::File { file, caption, .. } => CreateBlock::File { file, caption },
+            Block::File { file, .. } => CreateBlock::File { file },
             Block::Pdf { pdf, .. } => CreateBlock::Pdf { pdf },
             Block::Bookmark { bookmark, .. } => CreateBlock::Bookmark { bookmark },
             Block::Equation { equation, .. } => CreateBlock::Equation { equation },
@@ -590,7 +607,6 @@ pub enum CreateBlock {
     },
     File {
         file: FileObject,
-        caption: Text,
     },
     Pdf {
         pdf: FileObject,
