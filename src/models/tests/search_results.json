@@ -176,6 +176,7 @@
         "page_id": "7c"
       },
       "archived": false,
+      "in_trash": false,
       "properties": {
         "title": {
           "id": "title",

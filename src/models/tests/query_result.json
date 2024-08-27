@@ -11,6 +11,7 @@
         "database_id": "5d794de0-2224-49d3-86f9-3540db13d884"
       },
       "archived": false,
+      "in_trash": false,
       "properties": {
         "Name": {
           "id": "title",
