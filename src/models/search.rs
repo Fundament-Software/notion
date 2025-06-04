@@ -1,6 +1,6 @@
 use crate::ids::{PageId, UserId};
-use crate::models::paging::{Pageable, Paging, PagingCursor};
 use crate::models::Number;
+use crate::models::paging::{Pageable, Paging, PagingCursor};
 use serde::ser::SerializeMap;
 use serde::{Serialize, Serializer};
 use time::OffsetDateTime;

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod tests {
+mod tests_impl {
     use crate::ids::{BlockId, UserId};
     use crate::models::block::{
         Block, BlockCommon, Callout, ExternalFileObject, FileOrEmojiObject, InternalFileObject,
@@ -9,8 +9,8 @@ mod tests {
     use crate::models::users::UserCommon;
     use crate::models::{IconObject, Object};
     use std::str::FromStr;
-    use time::format_description::well_known::Iso8601;
     use time::OffsetDateTime;
+    use time::format_description::well_known::Iso8601;
 
     #[test]
     fn heading_1() {

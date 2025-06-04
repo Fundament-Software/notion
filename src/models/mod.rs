@@ -8,17 +8,16 @@ mod tests;
 pub mod text;
 pub mod users;
 
+use crate::Error;
 use crate::models::properties::{PropertyConfiguration, PropertyItem, PropertyValue};
 use crate::models::text::RichText;
-use crate::Error;
 use serde::{Deserialize, Serialize, Serializer};
 use std::collections::{BTreeMap, HashMap};
 use std::hash::{Hash, Hasher};
 
 use crate::ids::{AsIdentifier, BlockId, DatabaseId, PageId};
 use crate::models::block::{Block, CreateBlock, FileOrEmojiObject};
-use block::ExternalFileObject;
-use block::InternalFileObject;
+use block::{ExternalFileObject, InternalFileObject};
 
 use crate::models::error::ErrorResponse;
 use crate::models::paging::PagingCursor;
@@ -130,7 +129,9 @@ impl ListResponse<Object> {
             .into_iter()
             .map(|object| match object {
                 Object::Database { database } => Ok(database),
-                response => Err(Error::UnexpectedResponse { response }),
+                response => Err(Error::UnexpectedResponse {
+                    response: Box::new(response),
+                }),
             })
             .collect();
 
@@ -147,7 +148,9 @@ impl ListResponse<Object> {
             .into_iter()
             .map(|object| match object {
                 Object::Page { page } => Ok(page),
-                response => Err(Error::UnexpectedResponse { response }),
+                response => Err(Error::UnexpectedResponse {
+                    response: Box::new(response),
+                }),
             })
             .collect();
 
@@ -164,7 +167,9 @@ impl ListResponse<Object> {
             .into_iter()
             .map(|object| match object {
                 Object::Block { block } => Ok(block),
-                response => Err(Error::UnexpectedResponse { response }),
+                response => Err(Error::UnexpectedResponse {
+                    response: Box::new(response),
+                }),
             })
             .collect();
 
