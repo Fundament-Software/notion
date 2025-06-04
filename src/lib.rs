@@ -8,7 +8,7 @@ use models::block::{Block, CreateBlock};
 use models::paging::PagingCursor;
 use models::{PageCreateRequest, PageUpdateRequest, UpdateBlockChildrenRequest};
 use reqwest::header::{HeaderMap, HeaderValue};
-use reqwest::{header, Client, ClientBuilder, RequestBuilder};
+use reqwest::{Client, ClientBuilder, RequestBuilder, header};
 use tracing::Instrument;
 
 pub mod ids;
@@ -38,7 +38,7 @@ pub enum Error {
     JsonParseError { source: serde_json::Error },
 
     #[error("Unexpected API Response")]
-    UnexpectedResponse { response: Object },
+    UnexpectedResponse { response: Box<Object> },
 
     #[error("API Error {}({}): {}", .error.code, .error.status, .error.message)]
     ApiError { error: ErrorResponse },
@@ -113,8 +113,10 @@ impl NotionApi {
         tracing::debug!("JSON Response: {}", json);
         #[cfg(test)]
         {
-            dbg!(serde_json::from_str::<serde_json::Value>(&json)
-                .map_err(|source| Error::JsonParseError { source })?);
+            dbg!(
+                serde_json::from_str::<serde_json::Value>(&json)
+                    .map_err(|source| Error::JsonParseError { source })?
+            );
         }
         let result =
             serde_json::from_str(&json).map_err(|source| Error::JsonParseError { source })?;
@@ -133,7 +135,9 @@ impl NotionApi {
 
         match self.make_json_request(builder).await? {
             Object::List { list } => Ok(list.expect_databases()?),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -154,7 +158,9 @@ impl NotionApi {
 
         match result {
             Object::List { list } => Ok(list),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -172,7 +178,9 @@ impl NotionApi {
 
         match result {
             Object::Database { database } => Ok(database),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -190,7 +198,9 @@ impl NotionApi {
 
         match result {
             Object::Page { page } => Ok(page),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -209,7 +219,9 @@ impl NotionApi {
 
         match result {
             Object::Page { page } => Ok(page),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -226,7 +238,7 @@ impl NotionApi {
         let result = self
             .make_json_request(
                 self.client
-                    .patch(&format!(
+                    .patch(format!(
                         "https://api.notion.com/v1/pages/{page_id}",
                         page_id = page_id.as_id()
                     ))
@@ -236,7 +248,9 @@ impl NotionApi {
 
         match result {
             Object::Page { page } => Ok(page),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -256,7 +270,9 @@ impl NotionApi {
 
         match result {
             Object::PropertyItem { property_item } => Ok(property_item),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -276,7 +292,9 @@ impl NotionApi {
 
         match result {
             Object::List { list } => Ok(list),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -293,7 +311,7 @@ impl NotionApi {
         let result = self
             .make_json_request(
                 self.client
-                    .post(&format!(
+                    .post(format!(
                         "https://api.notion.com/v1/databases/{database_id}/query",
                         database_id = database.as_id()
                     ))
@@ -302,7 +320,9 @@ impl NotionApi {
             .await?;
         match result {
             Object::List { list } => Ok(list.expect_pages()?),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -320,7 +340,9 @@ impl NotionApi {
 
         match result {
             Object::Block { block } => Ok(block),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -330,7 +352,7 @@ impl NotionApi {
         block_id: T,
     ) -> Result<ListResponse<Block>, Error> {
         let result = self
-            .make_json_request(self.client.get(&format!(
+            .make_json_request(self.client.get(format!(
                 "https://api.notion.com/v1/blocks/{block_id}/children",
                 block_id = block_id.as_id()
             )))
@@ -338,7 +360,9 @@ impl NotionApi {
 
         match result {
             Object::List { list } => Ok(list.expect_blocks()?),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -351,7 +375,7 @@ impl NotionApi {
         let result = self
             .make_json_request(
                 self.client
-                    .get(&format!(
+                    .get(format!(
                         "https://api.notion.com/v1/blocks/{block_id}/children",
                         block_id = block_id.as_id()
                     ))
@@ -361,7 +385,9 @@ impl NotionApi {
 
         match result {
             Object::List { list } => Ok(list.expect_blocks()?),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -378,7 +404,7 @@ impl NotionApi {
         let result = self
             .make_json_request(
                 self.client
-                    .patch(&format!(
+                    .patch(format!(
                         "https://api.notion.com/v1/blocks/{block_id}/children",
                         block_id = block_id.as_id()
                     ))
@@ -388,7 +414,9 @@ impl NotionApi {
 
         match result {
             Object::List { list } => Ok(list.expect_blocks()?),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -398,7 +426,7 @@ impl NotionApi {
         block_id: T,
     ) -> Result<Block, Error> {
         let result = self
-            .make_json_request(self.client.delete(&format!(
+            .make_json_request(self.client.delete(format!(
                 "https://api.notion.com/v1/blocks/{block_id}",
                 block_id = block_id.as_id()
             )))
@@ -406,7 +434,9 @@ impl NotionApi {
 
         match result {
             Object::Block { block } => Ok(block),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 
@@ -427,7 +457,7 @@ impl NotionApi {
         let result = self
             .make_json_request(
                 self.client
-                    .patch(&format!(
+                    .patch(format!(
                         "https://api.notion.com/v1/blocks/{block_id}",
                         block_id = block_id.as_id()
                     ))
@@ -437,7 +467,9 @@ impl NotionApi {
 
         match result {
             Object::Block { block } => Ok(block),
-            response => Err(Error::UnexpectedResponse { response }),
+            response => Err(Error::UnexpectedResponse {
+                response: Box::new(response),
+            }),
         }
     }
 }

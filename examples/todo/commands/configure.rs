@@ -1,11 +1,11 @@
 use crate::TodoConfig;
 use anyhow::Result;
+use notion::NotionApi;
 #[cfg(not(windows))]
 use notion::ids::AsIdentifier;
 use notion::ids::DatabaseId;
-use notion::models::search::NotionSearch;
 use notion::models::Database;
-use notion::NotionApi;
+use notion::models::search::NotionSearch;
 #[cfg(not(windows))]
 use std::borrow::Cow;
 #[cfg(not(windows))]

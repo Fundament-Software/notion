@@ -1,7 +1,5 @@
-use crate::models::{
-    properties::{DateOrDateTime, RollupPropertyValue, RollupValue},
-    PropertyValue,
-};
+use crate::models::PropertyValue;
+use crate::models::properties::{DateOrDateTime, RollupPropertyValue, RollupValue};
 use time::{Date, Month};
 
 #[test]

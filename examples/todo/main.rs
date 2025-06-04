@@ -3,8 +3,8 @@ mod commands;
 use anyhow::{Context, Result};
 use clap::Parser;
 use config::Config;
-use notion::ids::DatabaseId;
 use notion::NotionApi;
+use notion::ids::DatabaseId;
 use serde::{Deserialize, Serialize};
 
 // From <https://docs.rs/clap/3.0.0-beta.2/clap/>

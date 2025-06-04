@@ -1,5 +1,4 @@
-use std::fmt::Display;
-use std::fmt::Error;
+use std::fmt::{Display, Error};
 
 pub trait Identifier: Display {
     fn value(&self) -> &str;
