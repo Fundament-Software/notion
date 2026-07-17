@@ -34,6 +34,12 @@ pub enum Error {
     #[error("Error reading response: {}", source)]
     ResponseIoError { source: reqwest::Error },
 
+    #[cfg(feature = "debugging")]
+    #[error("Error debugging json response: {:?}", source)]
+    JsonPathTrace {
+        source: serde_path_to_error::Error<serde_json::Error>,
+    },
+
     #[error("Error parsing json response: {}", source)]
     JsonParseError { source: serde_json::Error },
 
@@ -113,11 +119,27 @@ impl NotionApi {
         tracing::debug!("JSON Response: {}", json);
         #[cfg(test)]
         {
+            #[cfg(feature = "debugging")]
+            let jd = &mut serde_json::Deserializer::from_str(&json);
+            #[cfg(feature = "debugging")]
+            let result = dbg!(
+                serde_path_to_error::deserialize(jd)
+                    .map_err(|source| Error::JsonPathTrace { source })?
+            );
+
+            #[cfg(not(feature = "debugging"))]
             dbg!(
                 serde_json::from_str::<serde_json::Value>(&json)
                     .map_err(|source| Error::JsonParseError { source })?
             );
         }
+        #[cfg(feature = "debugging")]
+        let jd = &mut serde_json::Deserializer::from_str(&json);
+        #[cfg(feature = "debugging")]
+        let result = serde_path_to_error::deserialize(jd)
+            .map_err(|source| Error::JsonPathTrace { source })?;
+
+        #[cfg(not(feature = "debugging"))]
         let result =
             serde_json::from_str(&json).map_err(|source| Error::JsonParseError { source })?;
 

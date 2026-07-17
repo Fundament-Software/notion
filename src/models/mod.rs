@@ -59,12 +59,43 @@ pub struct Database {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[serde(rename_all = "lowercase")]
+pub enum IconColor {
+    Gray,
+    LightGray,
+    Brown,
+    Yellow,
+    Orange,
+    Green,
+    Blue,
+    Purple,
+    Pink,
+    Red,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub struct IconInner {
+    pub name: String,
+    pub color: Option<IconColor>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "type")]
 #[serde(rename_all = "snake_case")]
 pub enum IconObject {
-    File { file: InternalFileObject },
-    External { external: ExternalFileObject },
-    Emoji { emoji: String },
+    File {
+        file: InternalFileObject,
+    },
+    External {
+        external: ExternalFileObject,
+    },
+    Emoji {
+        emoji: String,
+    },
+    Icon {
+        #[serde(rename = "icon")]
+        icon: IconInner,
+    },
 }
 
 impl Hash for Database {
