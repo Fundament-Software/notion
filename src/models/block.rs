@@ -72,6 +72,10 @@ pub enum FileOrEmojiObject {
     External {
         external: ExternalFileObject,
     },
+    Icon {
+        name: String,
+        color: Option<super::IconColor>,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
